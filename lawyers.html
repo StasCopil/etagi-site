@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Юридический департамент</title>
+		<link
+			rel="icon"
+			type="image/png"
+			href="https://i.postimg.cc/Hkbmy899/image.png"
+		/>
+
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			/* Кастомные CSS переменные */
+/* Карточки департаментов — симметрия и адаптация для мобильных */
+.department-card {
+  background: linear-gradient(135deg, #f20a0a, #ff8a70);
+  color: #fff;
+  border-radius: 16px;
+  padding: 1.2rem 0.8rem;
+  min-height: 140px;
+  min-width: 0;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 4px 16px rgba(252,64,58,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+@media (max-width: 768px) {
+  .department-card {
+	min-height: 120px;
+	max-width: 95vw;
+	margin-bottom: 1rem;
+  }
+}
+
+/* Dropdown аккуратный, не ломает карточку */
+.dropdown-list {
+  width: 100%;
+  max-width: none;
+  background: #fff;
+  color: #fc403a;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(252,64,58,0.08);
+  padding: 0.7rem 0.5rem;
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  position: static;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .dropdown-list {
+	font-size: 0.95rem;
+	max-width: 95vw;
+	padding: 0.6rem 0.3rem;
+  }
+}
+
+/* Кнопки внутри карточек — одинаковые */
+.department-btn {
+  background: #fc403a;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.2rem 0.2rem;
+  width: 90%;
+  max-width: 220px;
+  transition: background 0.2s, transform 0.2s;
+}
+.department-btn:active {
+  background: #d63531;
+  transform: scale(0.97);
+}
+
+/* Сетка карточек — одна колонка на мобильных */
+.department-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  .department-cards-grid {
+	flex-direction: row;
+	justify-content: center;
+	gap: 2rem;
+  }
+}
+
+			:root {
+				--primary: #fc403a;
+
+				--primary-dark: #d63531;
+
+				--secondary: #ff6b66;
+
+				--accent: #ffffff;
+
+				--bg-primary: #130909;
+
+				--bg-secondary: #232326;
+
+				--bg-card: rgba(252, 64, 58, 0.08);
+
+				--text-primary: #ffffff;
+
+				--text-secondary: #ffd9d8;
+
+				--border: rgba(252, 64, 58, 0.15);
+
+				--black: #130909;
+
+				--white: #ffffff;
+			}
+
+			* {
+				margin: 0;
+
+				padding: 0;
+
+				box-sizing: border-box;
+			}
+
+			body,
+			html {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+				background: #ffffff;
+
+				color: #130909;
+
+				min-height: 100vh;
+
+				overflow-x: hidden;
+			}
+
+			/* ОСНОВНЫЕ СТИЛИ ИЗ ОРИГИНАЛА */
+
+			/* Плавная анимация загрузки страницы */
+
+			@keyframes fadeInUp {
+				from {
+					opacity: 0;
+
+					transform: translateY(30px);
+				}
+
+				to {
+					opacity: 1;
+
+					transform: translateY(0);
+				}
+			}
+
+			/* Анимированный градиентный фон для body */
+
+			body {
+				background: linear-gradient(
+					135deg,
+					#ffffff 0%,
+					#fef7f7 50%,
+					#ffffff 100%
+				);
+
+				background-size: 400% 400%;
+
+				animation: subtleGradient 8s ease-in-out infinite;
+			}
+
+			@keyframes subtleGradient {
+				0%,
+				100% {
+					background-position: 0% 50%;
+				}
+
+				50% {
+					background-position: 100% 50%;
+				}
+			}
+
+			/* Улучшенные частицы с разными размерами и скоростями */
+
+			.bg-particles {
+				position: fixed;
+
+				top: 0;
+
+				left: 0;
+
+				width: 100%;
+
+				height: 100%;
+
+				pointer-events: none;
+
+				z-index: -1;
+			}
+
+			.particle {
+				position: absolute;
+
+				background: var(--primary);
+
+				border-radius: 50%;
+
+				opacity: 0;
+
+				animation: improvedFloat 12s infinite linear;
+
+				box-shadow: 0 0 8px rgba(252, 64, 58, 0.6),
+					0 0 16px rgba(252, 64, 58, 0.3);
+			}
+
+			.particle:nth-child(odd) {
+				animation-duration: 10s;
+
+				background: linear-gradient(45deg, #fc403a, #ff6b66);
+			}
+
+			.particle:nth-child(3n) {
+				animation-duration: 14s;
+
+				width: 6px !important;
+
+				height: 6px !important;
+			}
+
+			@keyframes improvedFloat {
+				0% {
+					transform: translateY(100vh) rotate(0deg) scale(0);
+
+					opacity: 0;
+				}
+
+				5% {
+					opacity: 0.8;
+
+					transform: translateY(95vh) rotate(36deg) scale(1);
+				}
+
+				95% {
+					opacity: 0.8;
+				}
+
+				100% {
+					transform: translateY(-100px) rotate(720deg) scale(0);
+
+					opacity: 0;
+				}
+			}
+
+			/* Improved header with glassmorphism effect */
+
+			header {
+				backdrop-filter: blur(20px);
+
+				background: rgba(255, 255, 255, 0.95);
+
+				border-bottom: 1px solid rgba(252, 64, 58, 0.1);
+
+				box-shadow: 0 8px 32px rgba(252, 64, 58, 0.08);
+
+				position: sticky;
+
+				top: 0;
+
+				z-index: 100;
+
+				transition: all 0.3s ease;
+			}
+
+			/* Анимация появления карточек */
+
+			.cards-grid-container {
+				display: grid;
+
+				grid-template-columns: repeat(3, 1fr);
+
+				gap: 1.5rem;
+
+				max-width: 1400px;
+
+				margin: 0 auto;
+
+				padding: 0 1rem;
+			}
+
+			.modern-card {
+				background: linear-gradient(135deg, #f20a0a, #ff8a70) !important;
+
+				color: #ffffff !important;
+
+				border: none;
+
+				border-radius: 24px;
+
+				padding: 2rem;
+
+				position: relative;
+
+				overflow: hidden;
+
+				cursor: pointer;
+
+				box-shadow: 0 8px 32px rgba(252, 64, 58, 0.15),
+					0 4px 16px rgba(252, 64, 58, 0.1);
+
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+					'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
+
+				letter-spacing: 0.01em;
+
+				user-select: none;
+				transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); /* быстрее */
+				animation: fadeInUp 0.2s ease forwards; /* быстрее */
+				opacity: 0;
+			}
+
+			/* Задержка анимации для каждой карточки */
+
+			.modern-card:nth-child(1) {
+				animation-delay: 0.1s;
+			}
+
+			.modern-card:nth-child(2) {
+				animation-delay: 0.2s;
+			}
+
+			.modern-card:nth-child(3) {
+				animation-delay: 0.3s;
+			}
+
+			.modern-card:nth-child(4) {
+				animation-delay: 0.4s;
+			}
+
+			.modern-card:nth-child(5) {
+				animation-delay: 0.5s;
+			}
+
+			.modern-card:nth-child(6) {
+				animation-delay: 0.6s;
+			}
+
+			.modern-card:nth-child(7) {
+				animation-delay: 0.7s;
+			}
+
+			.modern-card:nth-child(8) {
+				animation-delay: 0.8s;
+			}
+
+			.modern-card:nth-child(9) {
+				animation-delay: 0.9s;
+			}
+
+			/* Улучшенные эффекты наведения */
+
+			.modern-card::before {
+				display: none;
+			}
+
+			.modern-card:hover {
+				transform: translateY(-8px) scale(1.05);
+
+				box-shadow: 0 20px 40px rgba(252, 64, 58, 0.3);
+
+				background: #d63531 !important;
+			}
+
+			.modern-card:active {
+				transform: translateY(-2px) scale(0.95);
+
+				transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			}
+
+			/* Улучшенная анимация иконок */
+
+			.gradient-icon {
+				width: 60px;
+
+				height: 60px;
+
+				border-radius: 16px;
+
+				background: rgba(255, 255, 255, 0.2);
+
+				backdrop-filter: blur(20px);
+
+				display: flex;
+
+				align-items: center;
+
+				justify-content: center;
+
+				margin: 0 auto 1rem;
+
+				position: relative;
+
+				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+				border: 1px solid rgba(255, 255, 255, 0.3);
+			}
+
+			.modern-card:hover .gradient-icon {
+				transform: scale(1.1);
+
+				background: rgba(255, 255, 255, 0.3);
+			}
+
+			.gradient-icon img {
+				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+				border-radius: 12px;
+			}
+
+			/* Пульсирующий эффект для заголовка */
+
+			.animated-title {
+				display: inline-block;
+
+				background: linear-gradient(45deg, #fc403a, #ff6b66, #fc403a, #d63531);
+
+				background-size: 400% 400%;
+
+				-webkit-background-clip: text;
+
+				-webkit-text-fill-color: transparent;
+
+				background-clip: text;
+
+				animation: titleGradient 6s ease-in-out infinite,
+					titlePulse 3s ease-in-out infinite alternate;
+
+				text-shadow: 0 0 30px rgba(252, 64, 58, 0.3);
+			}
+
+			@keyframes titleGradient {
+				0%,
+				100% {
+					background-position: 0% 50%;
+				}
+
+				50% {
+					background-position: 100% 50%;
+				}
+			}
+
+			@keyframes titlePulse {
+				0% {
+					transform: scale(1);
+				}
+
+				100% {
+					transform: scale(1.01);
+				}
+			}
+
+			/* Улучшенный логотип */
+
+			.logo-container {
+				position: relative;
+
+				display: inline-block;
+
+				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+				cursor: pointer;
+			}
+
+			.logo-image {
+				max-height: 48px;
+
+				width: auto;
+
+				border-radius: 12px;
+
+				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+				filter: drop-shadow(0 4px 8px rgba(252, 64, 58, 0.2))
+					drop-shadow(0 0 16px rgba(252, 64, 58, 0.1));
+			}
+
+			.logo-container::before {
+				content: '';
+
+				position: absolute;
+
+				top: -10px;
+
+				left: -10px;
+
+				right: -10px;
+
+				bottom: -10px;
+
+				background: linear-gradient(45deg, #fc403a, #ff6b66);
+
+				border-radius: 20px;
+
+				opacity: 0;
+
+				z-index: -1;
+
+				transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			}
+
+			.logo-container:hover::before {
+				opacity: 0.1;
+			}
+
+			.logo-container:hover {
+				transform: scale(1.1);
+			}
+
+.logo-container:hover .logo-image {
+	/* You can add hover styles for .logo-image here if needed */
+}
+
+			.search-result-item:hover {
+				background: rgba(252, 64, 58, 0.05);
+
+				transform: translateX(4px);
+			}
+
+			.search-result-item:last-child {
+				border-bottom: none;
+			}
+
+			.search-result-icon {
+				width: 32px;
+
+				height: 32px;
+
+				border-radius: 8px;
+
+				object-fit: cover;
+
+				flex-shrink: 0;
+			}
+
+			.search-result-text {
+				flex: 1;
+			}
+
+			.search-result-title {
+				font-weight: 600;
+
+				color: #130909;
+
+				font-size: 0.9rem;
+
+				margin-bottom: 2px;
+			}
+
+			.search-result-description {
+				color: #666;
+
+				font-size: 0.8rem;
+
+				line-height: 1.3;
+			}
+
+			/* Секция избранное и недавние */
+
+			.quick-access {
+				background: rgba(252, 64, 58, 0.03);
+
+				border-radius: 24px;
+
+				padding: 1.5rem;
+
+				margin-bottom: 2rem;
+
+				border: 1px solid rgba(252, 64, 58, 0.1);
+
+				position: relative;
+
+				overflow: hidden;
+			}
+
+			.quick-access-title {
+				font-size: 1.1rem;
+
+				font-weight: 600;
+
+				color: #130909;
+
+				margin-bottom: 1rem;
+
+				display: flex;
+
+				align-items: center;
+
+				gap: 0.5rem;
+			}
+
+			.quick-access-grid {
+				display: grid;
+
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+				gap: 0.75rem;
+
+				position: relative;
+
+				z-index: 1;
+			}
+
+			.quick-access-item {
+				background: white;
+
+				border: 1px solid rgba(252, 64, 58, 0.1);
+
+				border-radius: 16px;
+
+				padding: 1rem;
+
+				cursor: pointer;
+
+				transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+				display: flex;
+
+				align-items: center;
+
+				gap: 0.75rem;
+
+				position: relative;
+
+				overflow: hidden;
+			}
+
+			.quick-access-item:hover {
+				transform: translateY(-2px);
+
+				box-shadow: 0 8px 24px rgba(252, 64, 58, 0.15);
+
+				border-color: rgba(252, 64, 58, 0.3);
+			}
+
+			.quick-access-icon {
+				width: 32px;
+
+				height: 32px;
+
+				border-radius: 8px;
+
+				object-fit: cover;
+
+				flex-shrink: 0;
+			}
+
+			.quick-access-text {
+				font-size: 0.85rem;
+
+				font-weight: 500;
+
+				color: #130909;
+
+				line-height: 1.2;
+			}
+
+			/* Индикатор внешней ссылки */
+
+			.modern-card[data-external='true']::after {
+				content: '↗';
+
+				position: absolute;
+
+				top: 1rem;
+
+				right: 1rem;
+
+				width: 24px;
+
+				height: 24px;
+
+				background: rgba(255, 255, 255, 0.2);
+
+				border-radius: 50%;
+
+				display: flex;
+
+				align-items: center;
+
+				justify-content: center;
+
+				font-size: 0.8rem;
+
+				font-weight: bold;
+			}
+
+			/* Preloader */
+
+			.loading-indicator {
+				position: fixed;
+
+				top: 50%;
+
+				left: 50%;
+
+				transform: translate(-50%, -50%);
+
+				width: 50px;
+
+				height: 50px;
+
+				border: 3px solid rgba(252, 64, 58, 0.1);
+
+				border-top-color: #fc403a;
+
+				border-radius: 50%;
+
+				animation: spin 0.8s linear infinite;
+
+				z-index: 9999;
+
+				display: none;
+
+				pointer-events: none;
+			}
+
+			@keyframes spin {
+				to {
+					transform: translate(-50%, -50%) rotate(360deg);
+				}
+			}
+
+			/* Индикатор прогресса прокрутки */
+
+			.scroll-progress {
+				position: fixed;
+
+				top: 0;
+
+				left: 0;
+
+				height: 3px;
+
+				width: 0;
+
+				background: linear-gradient(90deg, #fc403a, #ff6b66);
+
+				z-index: 101;
+
+				transition: width 0.2s ease;
+
+				box-shadow: 0 0 10px rgba(252, 64, 58, 0.5);
+			}
+
+			/* Mobile adaptation with improved animations */
+
+			@media (max-width: 768px) {
+				.cards-grid-container {
+					grid-template-columns: repeat(3, 1fr);
+
+					gap: 0.5rem;
+
+					padding: 0 0.5rem;
+				}
+
+				.modern-card {
+					padding: 0.75rem;
+
+					border-radius: 16px;
+
+					min-height: 110px;
+
+					display: flex;
+
+					flex-direction: column;
+
+					justify-content: center;
+
+					align-items: center;
+
+					text-align: center;
+
+					transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+				}
+
+				/* Упрощенные эффекты для мобильных */
+
+				.modern-card:hover {
+					transform: translateY(-2px) scale(1.01);
+
+					box-shadow: 0 6px 16px rgba(252, 64, 58, 0.15);
+				}
+
+				.modern-card:active {
+					transform: scale(0.95);
+
+					transition: transform 0.15s ease;
+				}
+
+				/* Отключаем сложные анимации на мобильных */
+
+				.modern-card::before {
+					display: none;
+				}
+
+				.modern-card:hover .gradient-icon {
+					transform: scale(1.02);
+				}
+
+				.modern-card h3 {
+					font-size: 0.75rem;
+
+					font-weight: 600;
+
+					margin-bottom: 0.25rem;
+
+					line-height: 1.1;
+				}
+
+				.modern-card p {
+					font-size: 0.6rem;
+
+					line-height: 1.2;
+
+					opacity: 0.9;
+
+					overflow: hidden;
+
+					display: -webkit-box;
+
+					-webkit-line-clamp: 2;
+					line-clamp: 2;
+
+					-webkit-box-orient: vertical;
+				}
+
+				.gradient-icon {
+					width: 30px;
+
+					height: 30px;
+
+					margin-bottom: 0.4rem;
+
+					border-radius: 8px;
+
+					transition: all 0.3s ease;
+				}
+
+				.gradient-icon img {
+					width: 26px !important;
+
+					height: 26px !important;
+
+					border-radius: 6px;
+				}
+
+				header h1 {
+					font-size: 1.1rem !important;
+				}
+
+				.animated-title {
+					font-size: 1.8rem !important;
+
+					animation: titleGradient 6s ease-in-out infinite;
+				}
+
+				.subtitle-text {
+					font-size: 0.85rem !important;
+
+					padding: 0 1rem;
+				}
+
+				.particle {
+					width: 2px !important;
+
+					height: 2px !important;
+
+					animation-duration: 8s !important;
+				}
+
+				.logo-image {
+					max-height: 40px !important;
+				}
+
+				.cards-grid-container {
+					margin-top: 2rem;
+				}
+
+				.quick-access {
+					padding: 1rem;
+
+					margin-bottom: 1.5rem;
+				}
+
+				.quick-access-grid {
+					grid-template-columns: 1fr 1fr;
+
+					gap: 0.5rem;
+				}
+
+				.quick-access-item {
+					padding: 0.75rem;
+
+					font-size: 0.8rem;
+				}
+
+				.quick-access-icon {
+					width: 24px;
+
+					height: 24px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.cards-grid-container {
+					grid-template-columns: repeat(3, 1fr);
+
+					gap: 0.4rem;
+
+					padding: 0 0.4rem;
+				}
+
+				.modern-card {
+					padding: 0.5rem;
+
+					min-height: 90px;
+
+					border-radius: 12px;
+				}
+
+				.modern-card h3 {
+					font-size: 0.65rem;
+
+					margin-bottom: 0.2rem;
+
+					line-height: 1;
+				}
+
+				.modern-card p {
+					font-size: 0.55rem;
+
+					line-height: 1.1;
+
+					-webkit-line-clamp: 2;
+				}
+
+				.gradient-icon {
+					width: 24px;
+
+					height: 24px;
+
+					margin-bottom: 0.3rem;
+				}
+
+				.gradient-icon img {
+					width: 20px !important;
+
+					height: 20px !important;
+
+					border-radius: 4px;
+				}
+
+				.animated-title {
+					font-size: 1.5rem !important;
+				}
+			}
+
+			@media (hover: none) {
+				/* Отключаем hover эффекты на тач-устройствах */
+
+				.modern-card:hover,
+				.logo-container:hover {
+					transform: none;
+
+					box-shadow: initial;
+
+					background: #fc403a !important;
+				}
+
+				/* Только эффекты нажатия - более заметные */
+
+				.modern-card:active {
+					transform: scale(0.92);
+
+					transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+					background: #d63531 !important;
+				}
+
+				.logo-container:active {
+					transform: scale(0.98);
+
+					transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+				}
+
+				/* Упрощенные анимации загрузки */
+
+				.modern-card {
+					animation: fadeInUpMobile 0.4s ease forwards;
+				}
+
+				@keyframes fadeInUpMobile {
+					from {
+						opacity: 0;
+
+						transform: translateY(15px);
+					}
+
+					to {
+						opacity: 1;
+
+						transform: translateY(0);
+					}
+				}
+			}
+
+			/* Общие Tailwind классы */
+
+			.py-4 {
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+			}
+
+			.md\:py-6 {
+				padding-top: 1.5rem;
+				padding-bottom: 1.5rem;
+			}
+
+			.px-4 {
+				padding-left: 1rem;
+				padding-right: 1rem;
+			}
+
+			.max-w-7xl {
+				max-width: 80rem;
+			}
+
+			.mx-auto {
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.flex {
+				display: flex;
+			}
+
+			.flex-col {
+				flex-direction: column;
+			}
+
+			.items-center {
+				align-items: center;
+			}
+
+			.justify-start {
+				justify-content: flex-start;
+			}
+
+			.w-auto {
+				width: auto;
+			}
+
+			.object-contain {
+				object-fit: contain;
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.mb-8 {
+				margin-bottom: 2rem;
+			}
+
+			.mb-16 {
+				margin-bottom: 4rem;
+			}
+
+			.mb-4 {
+				margin-bottom: 1rem;
+			}
+
+			.mb-6 {
+				margin-bottom: 1.5rem;
+			}
+
+			.text-3xl {
+				font-size: 1.875rem;
+				line-height: 2.25rem;
+			}
+
+			.text-lg {
+				font-size: 1.125rem;
+				line-height: 1.75rem;
+			}
+
+			.font-bold {
+				font-weight: 700;
+			}
+
+			.max-w-2xl {
+				max-width: 42rem;
+			}
+
+			.max-w-lg {
+				max-width: 32rem;
+			}
+
+			.relative {
+				position: relative;
+			}
+
+			.absolute {
+				position: absolute;
+			}
+
+			.w-full {
+				width: 100%;
+			}
+
+			.py-3 {
+				padding-top: 0.75rem;
+				padding-bottom: 0.75rem;
+			}
+
+			.rounded-2xl {
+				border-radius: 1rem;
+			}
+
+			.bg-white {
+				background-color: #ffffff;
+			}
+
+			.shadow-sm {
+				box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+			}
+
+			.inset-y-0 {
+				top: 0;
+				bottom: 0;
+			}
+
+			.right-0 {
+				right: 0;
+			}
+
+			.pr-4 {
+				padding-right: 1rem;
+			}
+
+			.w-5 {
+				width: 1.25rem;
+			}
+
+			.h-5 {
+				height: 1.25rem;
+			}
+
+			.text-gray-400 {
+				color: #9ca3af;
+			}
+
+			.top-full {
+				top: 100%;
+			}
+
+			.left-0 {
+				left: 0;
+			}
+
+			.border {
+				border-width: 1px;
+			}
+
+			.shadow-lg {
+				box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+					0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			}
+
+			.mt-2 {
+				margin-top: 0.5rem;
+			}
+
+			.max-h-60 {
+				max-height: 15rem;
+			}
+
+			.overflow-y-auto {
+				overflow-y: auto;
+			}
+
+			.z-50 {
+				z-index: 50;
+			}
+
+			.group {
+				position: relative;
+			}
+
+			.-translate-x-1\/2 {
+				transform: translateX(-50%);
+			}
+
+			.text-sm {
+				font-size: 0.875rem;
+				line-height: 1.25rem;
+			}
+
+			.text-white {
+				color: #ffffff;
+			}
+
+			.opacity-0 {
+				opacity: 0;
+			}
+
+			.invisible {
+				visibility: hidden;
+			}
+
+			.transition {
+				transition-property: all;
+				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+				transition-duration: 150ms;
+			}
+
+			/* Медиа-запросы */
+
+			@media (min-width: 768px) {
+				.md\:py-6 {
+					padding-top: 1.5rem;
+					padding-bottom: 1.5rem;
+				}
+
+				.md\:mb-16 {
+					margin-bottom: 4rem;
+				}
+
+				.md\:text-4xl {
+					font-size: 2.25rem;
+					line-height: 2.5rem;
+				}
+
+				.md\:text-xl {
+					font-size: 1.25rem;
+					line-height: 1.75rem;
+				}
+			}
+
+			@media (min-width: 1024px) {
+				.lg\:text-5xl {
+					font-size: 3rem;
+					line-height: 1;
+				}
+			}
+
+			.tooltip {
+				background-color: #fc403a;
+
+				transition: all 0.3s ease;
+
+				white-space: nowrap;
+
+				z-index: 10;
+			}
+
+			.group:hover .tooltip {
+				opacity: 1;
+
+				visibility: visible;
+			}
+
+			.dropdown-list {
+  overflow-x: hidden;
+  padding-right: 4px; /* минимальный запас справа */
+  box-sizing: border-box;
+  overflow-anchor: none;
+}
+
+.dropdown-list li {
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  transform-origin: left center;
+}
+
+.dropdown-list li:hover {
+  transform: scale(1.04);
+}
+.lawyers-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  justify-items: center;
+}
+@media (max-width: 768px) {
+  .lawyers-photos-grid {
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.7rem;
+	padding: 0 0.2rem;
+  }
+}
+		</style>
+	</head>
+
+	<body>
+		<!-- Preloader -->
+
+		<!-- Прелоадер отключён для мгновенного перехода -->
+		<!-- <div class="loading-indicator" id="loadingIndicator"></div> -->
+
+		<!-- Индикатор прогресса прокрутки -->
+
+		<div class="scroll-progress" id="scrollProgress"></div>
+
+		<!-- Анимированные частицы фона -->
+
+		<div class="bg-particles" id="particles"></div>
+
+		<!-- Главная страница -->
+
+		<div id="mainPage" class="min-h-screen flex flex-col">
+			<!-- Хедер -->
+
+			<header class="py-4 md:py-6 px-4 header-main-custom">
+				<div class="max-w-7xl mx-auto flex flex-col items-start">
+					<!-- Логотип -->
+					<div class="logo-container mb-4">
+						<img
+							src="https://i.postimg.cc/xTfKTV6w/image.png"
+							alt="Логотип"
+							class="logo-image w-auto object-contain"
+						/>
+					</div>
+
+					<!-- Кнопки под логотипом -->
+				</div>
+			</header>
+			<!-- Основной контент -->
+
+			<main class="flex-1 px-4">
+				<div class="max-w-7xl mx-auto">
+					<!-- Кнопки навигации по центру -->
+					<div class="flex justify-start mt-2 mb-6">
+						<button
+							onclick="history.back()"
+							class="flex items-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md mr-4 transition-all duration-200 hover:-translate-y-1 hover:scale-105 active:scale-95"
+							style="font-size: 1rem"
+						>
+							<svg
+								class="mr-2"
+								width="20"
+								height="20"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<path
+									fill="currentColor"
+									d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+								/>
+							</svg>
+							Назад
+						</button>
+						<button
+							onclick="window.location.href='index.html'"
+							class="flex items-center bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition-all duration-200 hover:-translate-y-1 hover:scale-105 active:scale-95"
+							style="font-size: 1rem"
+						>
+							<svg
+								class="mr-2"
+								width="20"
+								height="20"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<path
+									fill="currentColor"
+									d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+								/>
+							</svg>
+							Главная
+						</button>
+					</div>
+
+					<!-- Логотип по центру -->
+					<div class="flex justify-center mb-4">
+						<img
+							id="lawyersLogo"
+							src="https://i.postimg.cc/XqbqrDJn/Whats-App-Image-2025-07-25-at-16-57-08.jpg"
+							alt="Юридический отдел"
+							class="mx-auto"
+							style="
+								display: block;
+								max-height: 120px;
+								border-radius: 12px;
+								filter: drop-shadow(rgba(252, 64, 58, 0.25) 0px 8px 16px);
+							"
+						/>
+					</div>
+						<div class="text-center mb-8">
+						<h1 class="text-2xl md:text-3xl font-bold mb-2" id="lawyersTitle" style="cursor:pointer;">
+							Юридический департамент
+						</h1>
+					</div>
+					<!-- Блок фото специалистов, скрывается/раскрывается -->
+<div id="lawyersPhotosBlock" style="display:none;">
+						<div class="flex justify-center mb-4">
+							<img class="lawyers-photo mx-auto border border-black rounded-xl" src="https://cdn.esoft.digital/320240/cluster/profiles/50/06bde18566452b47bfc9d1cf659112d346f98550.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
+						</div>
+						<div class="text-center mb-2" style="font-size:1rem; color:#130909;">
+							<b>Федорова Екатерина Юрьевна</b>
+							<br>
+							Руководитель юридического департамента
+						</div>
+						<!-- Сетка из 3 фото специалистов -->
+						<div class="lawyers-photos-grid max-w-4xl mx-auto mb-8">
+							<div class="flex flex-col items-center">
+<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/11/002ad774b96f9647709b7f753ef416c241e80611.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover;  background:#fff;" />
+<div style="font-size:1rem; color:#130909; text-align:center;">
+  <b>Буянова(Буданова) Дарья Владимировна</b>
+  <div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Помощник юриста</div>
+</div>
+							</div>
+							<div class="flex flex-col items-center">
+<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/5f/b753096cd4452ef8f82ce370a98920c7477cd95f.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
+								<div style="font-size:1rem; color:#130909; text-align:center;">
+									<b>Кольцов Алексей Сергеевич</b>
+									<div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Старший юрист</div>
+								</div>
+							</div>
+							<div class="flex flex-col items-center">
+<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/ac/27196d9c9eccced779a8af43e4fb1f1c52eab8ac.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
+								<div style="font-size:1rem; color:#130909; text-align:center;">
+									<b>Вечканова Анна Сергеевна</b>
+									<div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Помощник Юриста</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Заголовок и подзаголовок -->
+				
+
+					<!-- Сетка карточек -->
+					<div
+						class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center max-w-4xl mx-auto p-4"
+					>
+						<button
+							id="internalBtn"
+							class="bg-red-500 hover:bg-red-600 text-white font-semibold py-6 rounded-2xl shadow-md text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+							type="button"
+						>
+							Для внутреннего пользования
+						</button>
+						<div
+	id="internalSection"
+	style="display: none; margin-top: 1rem; max-height: 120px; min-height: 220px; overflow-y: auto;"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+						>
+							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
+								Для внутреннего пользования
+							</h3>
+					<ul class="list-disc pl-6 text-lg dropdown-list" style="color: #130909">
+		<li>
+			<a href="https://docs.google.com/document/d/1xBAB2WNAB1cf58sUjXoNtYKcMqnr5J2ug4rN2qqfsRo/edit?tab=t.0" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><i><b>Регламент проверок</b></i></a>
+		</li>
+								<li>
+									<a href="https://docs.google.com/spreadsheets/d/14YOMEVO0Ehutllz2qxUKFlQEDIVA7g0qHgjCs1tUnc0/edit?gid=216505420#gid=216505420" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Регламент для аудита</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/spreadsheets/d/1llkHBd3N38lzGBkTcG5sl0KkNw8-JohAXAnCM8SZWxs/edit?gid=1012771702#gid=1012771702" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><em>Регламент юридического департамента</em></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1_Cz6iCss2FBqRD98AKt5somD48vWO1wGYw5kpnPZfc8/edit?tab=t.wmc79u9ek44b" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Регламент рассрочки</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/spreadsheets/d/1pGibexQ2958vuNP_tUwj3JcI2u19hfh9w5F1eQ77AGo/edit?gid=786102785#gid=786102785" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Ошибки в договорах</i></b></a>
+								</li>
+							</ul>
+						</div>
+						<button
+							id="rgpBtn"
+							class="bg-red-500 hover:bg-red-600 text-white font-semibold py-6 rounded-2xl shadow-md text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+							type="button"
+						>
+							Для РГП
+						</button>
+						<div
+	id="rgpSection"
+	style="display: none; margin-top: 1rem; max-height: 120px; min-height: 200px; overflow-y: auto;"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+						>
+							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
+								Для РГП
+							</h3>
+					<ul class="list-disc pl-6 text-lg dropdown-list" style="color: #130909">
+								<li>
+									<a href="https://docs.google.com/spreadsheets/d/1W36ytAKQaCe6KFocGcmNXsP0l0H0_As75Sq5pIUOssk/edit?gid=0#gid=0" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Активные задатки</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1p2fHtyeDK2l5pUUmqJiUgkVh8p-198xl/edit?tab=t.0" target="_blank" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Чек-лист проведению задаток</i></b></a>
+								</li>
+							</ul>
+						</div>
+						<button
+							id="spnBtn"
+							class="bg-red-500 hover:bg-red-600 text-white font-semibold py-6 rounded-2xl shadow-md text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+							type="button"
+						>
+							Для СПН
+						</button>
+						<div
+	id="spnSection"
+style="display: none; margin-top: 1rem; max-height: 120px; min-height:200px; overflow-y: auto; position: relative;"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+						>
+							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
+								Для СПН
+							</h3>
+				<ul class="dropdown-list list-disc pl-6 text-lg">
+								<li>
+									<a href="https://docs.google.com/document/d/1p2fHtyeDK2l5pUUmqJiUgkVh8p-198xl/edit?usp=drive_link&ouid=114457247548955982049&rtpof=true&sd=true" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Чек лист по задатку</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/13sUGHJ-DbAshHn2ew-rP1dIDXv0KI-ey/edit?tab=t.0" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Уведомление о справке о зарегестрированных</i></b></a>
+								</li>
+								<li>
+									<a href="https://drive.google.com/file/d/1MYFkesFMTILjhsIDfFjO3tq5Uaz0Sosq/view?usp=drive_link" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Памятка о переоформлении лицевого счета при смене собственника</i></b></a>
+								</li>
+								<li>
+									<a href="https://drive.google.com/drive/folders/1p3q7ecxCyONCbWj9tLB4JwOteTzX7bJm" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Видео инструкция для отправки клиенту о том как подписать договор онлайн</i></b></a>
+								</li>
+								<li>
+									<a href="https://drive.google.com/file/d/1mVbz4uJM5yUYiGwd-xSeRZSsw3CGbotW/view" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Мультик для риелтора, о том что такое онлайн подписание</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/presentation/d/1Qd1ktuIH12iEIfNRWfc1yKN90qG7jdvKzjGUWrXXf60/edit" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Презентация по межеванию/Град плану/Акту выноса точек</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1mScl1nqqHsSGxjyiZCGyi3ShU7sAfLg3luhMu97yxyY/edit" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Чек лист документов к основному договору</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1_YQa830QVstxOgvsOMuhId_QlCUhsqFLxW1tCi0J0kg/edit?tab=t.0" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Чек-лист подачи заявки на предварительный договор</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1HEizbcLzoBrvJjpgVn2ld7yej7awQdXbX0Oa4f3-yTM/edit?tab=t.0" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Установленная сумма задатка, в зависимости от стоимости объекта</i></b></a>
+								</li>
+								<li>
+									<a href="https://drive.google.com/file/d/1lvOpIPsWlfEO29_-uW3aYnwhx1sR7j0Z/view?usp=drive_link" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Шаблон агентского договора для продавца</i></b></a>
+								</li>
+								<li>
+									<a href="https://drive.google.com/file/d/1kBxkOn7HPzUnen0WRx9pSa-Tohj5i6rs/view?usp=drive_link" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Шаблон агентского договора для покупателя</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/presentation/d/1lsZID3j3Q8P4rvFObAh6wOPNh7HXmNff/edit?usp=drive_link&ouid=114457247548955982049&rtpof=true&sd=true" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Презентация с обучения для риелторов по электронной регестрации</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/presentation/d/1L1ppoS7iE2Wpo4xG9Blb1XuNwScdmgxKlnxyJ-b6Wj4/edit?usp=drive_link" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Презентация с обучения по проведению нотариальных сделок</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/presentation/d/1_ZvLknx3nIuElmmJutg2zillnnfGOs5X9FVk8XSM0a4/edit?slide=id.p#slide=id.p" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Презентация с обучения по проведению сделок с загородной недвижимостью</i></b></a>
+								</li>
+								<li>
+									<a href="https://docs.google.com/document/d/1HEizbcLzoBrvJjpgVn2ld7yej7awQdXbX0Oa4f3-yTM/edit?tab=t.0" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Установленная сумма задатка, в зависимости от стоимости объекта</i></b></a>
+								</li>
+							
+							</ul>
+						</div>
+						<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Логика для dropdown-кнопок
+  const buttons = [
+	{ btn: 'internalBtn', section: 'internalSection' },
+	{ btn: 'rgpBtn', section: 'rgpSection' },
+	{ btn: 'spnBtn', section: 'spnSection' }
+  ];
+  buttons.forEach(({ btn, section }) => {
+	const btnEl = document.getElementById(btn);
+	const secEl = document.getElementById(section);
+	if (btnEl && secEl) {
+	  btnEl.addEventListener('click', function (e) {
+		e.stopPropagation();
+		buttons.forEach(({ section: sec }) => {
+		  const el = document.getElementById(sec);
+		  if (el) {
+			if (sec === section) {
+			  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+			} else {
+			  el.style.display = 'none';
+			}
+		  }
+		});
+	  });
+	}
+  });
+  document.addEventListener('click', function (e) {
+	buttons.forEach(({ btn, section }) => {
+	  const btnEl = document.getElementById(btn);
+	  const secEl = document.getElementById(section);
+	  if (btnEl && secEl && !btnEl.contains(e.target) && !secEl.contains(e.target)) {
+		secEl.style.display = 'none';
+	  }
+	});
+  });
+
+  // Логика для скрытия/отображения блока с фото специалистов
+  var lawyersTitle = document.getElementById('lawyersTitle');
+  var lawyersPhotosBlock = document.getElementById('lawyersPhotosBlock');
+  if (lawyersTitle && lawyersPhotosBlock) {
+	lawyersTitle.addEventListener('click', function () {
+	  if (lawyersPhotosBlock.style.display === 'none') {
+		lawyersPhotosBlock.style.display = 'block';
+	  } else {
+		lawyersPhotosBlock.style.display = 'none';
+	  }
+	});
+  }
+});
+						</script>
+					</div>
+				</div>
+			</main>
+
+			<!-- Футер -->
+
+			<footer class="py-8 text-center">
+				<p style="color: #000000">© 2025 Станислав Сизько. Все права защищены.</p>
+				 <address style="color: #000000; font-style: normal;">
+					Шолохова 22, 344019
+					<a href="mailto:info@example.com">
+				</address>
+			</footer>
+		</div>
+		<script>
+			// Хранилище для недавних
+			// (Your JavaScript logic should go here, not HTML markup)
+			// Remove any HTML fragments from inside <script> tags.
+		</script>
+
+<style>
+  .dropdown-list li {
+	transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s;
+	will-change: transform;
+	border-radius: 8px;
+  }
+  .dropdown-list li:hover {
+	transform: scale(1.08);
+	background: #FC403A;
+	color: #FFFFFF;
+	box-shadow: 0 2px 12px rgba(252, 64, 58, 0.10);
+  }
+  .dropdown-list li:hover a {
+	color: #FFFFFF !important;
+	text-decoration: underline;
+  }
+  @media (max-width: 768px) {
+	.dropdown-list {
+	  font-size: 0.9rem;
+	  padding-left: 0.5rem;
+	  padding-right: 0.5rem;
+	  border-radius: 12px;
+	  box-shadow: 0 2px 8px rgba(252, 64, 58, 0.08);
+	  background: #fff;
+	  color: #130909;
+	  margin-bottom: 0.5rem;
+	  max-height: 180px;
+	  overflow-y: auto;
+	}
+	.dropdown-list li {
+	  padding: 0.5rem 0.7rem;
+	  font-size: 0.9rem;
+	  border-radius: 8px;
+	  margin-bottom: 2px;
+	  transition: background 0.2s, transform 0.2s;
+	}
+	.dropdown-list li:hover {
+	  background: #FC403A;
+	  color: #FFFFFF;
+	  box-shadow: 0 2px 12px rgba(252,64,58,0.10);
+	  transform: scale(1.08);
+	}
+	.dropdown-list li:hover a {
+	  color: #FFFFFF !important;
+	  text-decoration: underline;
+	}
+  }
+</style>
+	
+
+	</body>
+</html>
