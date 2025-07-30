@@ -1322,6 +1322,24 @@
 	padding: 0 0.2rem;
   }
 }
+
+.resizable-dropdown {
+    resize: both;
+    overflow: auto;
+    min-height: 80px;
+    min-width: 200px;
+    max-height: 400px;
+    max-width: 100%;
+    position: relative;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;  /* Chrome/Safari */
+  background: transparent;
+}
 		</style>
 	</head>
 
@@ -1436,39 +1454,195 @@
 							</a>
 							<br>
 							Руководитель юридического департамента
+							<div id="fedorova-schedule" style="font-size:0.95rem; color:#fc403a; margin-top:4px;"></div>
 						</div>
+						<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const schedule = [
+        '09:00–18:00', // Пн
+        '09:00–18:00', // Вт
+        '09:00–18:00', // Ср
+        '09:00–18:00', // Чт
+        '09:00–18:00', // Пт
+        'Выходной',    // Сб
+        'Выходной'     // Вс
+    ];
+
+    const now = new Date();
+    const day = now.getDay(); // 0 - Вс, 1 - Пн, ..., 6 - Сб
+    const scheduleIndex = day === 0 ? 6 : day - 1; // Преобразуем к вашему массиву
+    const todaySchedule = schedule[scheduleIndex];
+
+    let status = '';
+    if (todaySchedule === 'Выходной') {
+        status = 'Сегодня выходной';
+    } else {
+        const [start, end] = todaySchedule.split('–');
+        const [startH, startM] = start.split(':').map(Number);
+        const [endH, endM] = end.split(':').map(Number);
+        const nowMinutes = now.getHours() * 60 + now.getMinutes();
+        const startMinutes = startH * 60 + startM;
+        const endMinutes = endH * 60 + endM;
+
+        if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
+            status = 'Сейчас работает';
+        } else {
+            status = 'Сейчас не работает';
+        }
+    }
+
+    document.getElementById('fedorova-schedule').textContent = todaySchedule + ' (' + status + ')';
+});
+						</script>
 						<!-- Сетка из 3 фото специалистов -->
 						<div class="lawyers-photos-grid max-w-4xl mx-auto mb-8">
 							<div class="flex flex-col items-center">
-<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/11/002ad774b96f9647709b7f753ef416c241e80611.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover;  background:#fff;" />
-<div style="font-size:1rem; color:#130909; text-align:center;">
-	<b>Буянова(Буданова) Дарья Владимировна</b>
-	<a href="https://wa.me/79034375870" target="_blank" rel="noopener" style="margin-left:8px; vertical-align:middle; display:inline-block;">
-		<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:22px; height:22px; display:inline-block; vertical-align:middle; border-radius:4px;" />
-	</a>
-  <div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Юрист</div>
-</div>
+								<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/11/002ad774b96f9647709b7f753ef416c241e80611.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover;  background:#fff;" />
+								<div style="font-size:1rem; color:#130909; text-align:center;">
+									<b>Буянова(Буданова) Дарья Владимировна</b>
+									<a href="https://wa.me/79034375870" target="_blank" rel="noopener" style="margin-left:8px; vertical-align:middle; display:inline-block;">
+										<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:22px; height:22px; display:inline-block; vertical-align:middle; border-radius:4px;" />
+									</a>
+									<div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Юрист</div>
+									<div id="buyanova-schedule" style="font-size:0.95rem; color:#fc403a; margin-top:4px;"></div>
+								</div>
 							</div>
+							<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								const schedule = [
+									{ office: '10:00–18:00', home: '19:00–20:00' }, // Пн
+									{ office: '10:00–18:00', home: '19:00–20:00' }, // Вт
+									{ office: '10:00–18:00', home: '19:00–20:00' }, // Ср
+									{ office: '10:00–18:00', home: '19:00–20:00' }, // Чт
+									{ office: '10:00–18:00', home: '19:00–20:00' }, // Пт
+									{ office: null, home: null }, // Сб
+									{ office: null, home: null }  // Вс
+								];
+								const now = new Date();
+								const day = now.getDay(); // 0 - Вс, 1 - Пн, ..., 6 - Сб
+								const scheduleIndex = day === 0 ? 6 : day - 1;
+								const today = schedule[scheduleIndex];
+								let status = '';
+								if (!today.office && !today.home) {
+									status = 'Сегодня выходной';
+								} else {
+									const pad = n => n.toString().padStart(2, '0');
+									const nowHM = pad(now.getHours()) + ':' + pad(now.getMinutes());
+									const inRange = (start, end) => {
+										const [sh, sm] = start.split(':').map(Number);
+										const [eh, em] = end.split(':').map(Number);
+										const nowM = now.getHours() * 60 + now.getMinutes();
+										const sM = sh * 60 + sm;
+										const eM = eh * 60 + em;
+										return nowM >= sM && nowM <= eM;
+									};
+									if (today.office && inRange('10:00', '18:00')) {
+										status = 'Сейчас работает в офисе';
+									} else if (today.home && inRange('19:00', '20:00')) {
+										status = 'Сейчас работает из дома';
+									} else {
+										status = 'Сейчас не работает';
+									}
+								}
+								let text = '';
+								if (!today.office && !today.home) {
+									text = 'Выходной (' + status + ')';
+								} else {
+									text = `В офисе: ${today.office} &nbsp;|&nbsp; Из дома: ${today.home} (${status})`;
+								}
+								document.getElementById('buyanova-schedule').innerHTML = text;
+							});
+							</script>
 							<div class="flex flex-col items-center">
-<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/5f/b753096cd4452ef8f82ce370a98920c7477cd95f.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
+								<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/5f/b753096cd4452ef8f82ce370a98920c7477cd95f.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
 								<div style="font-size:1rem; color:#130909; text-align:center;">
 									<b>Кольцов Алексей Сергеевич</b>
 									<a href="https://wa.me/79614054814" target="_blank" rel="noopener" style="margin-left:8px; vertical-align:middle; display:inline-block;">
 										<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:22px; height:22px; display:inline-block; vertical-align:middle; border-radius:4px;" />
 									</a>
 									<div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Старший юрист</div>
+									<div id="koltsov-schedule" style="font-size:0.95rem; color:#fc403a; margin-top:4px;"></div>
 								</div>
 							</div>
+							<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								const schedule = [
+									'Выходной',    // Пн
+									'09:00–18:00', // Вт
+									'09:00–18:00', // Ср
+									'09:00–18:00', // Чт
+									'09:00–18:00', // Пт
+									'09:00–18:00', // Сб
+									'Выходной'     // Вс
+								];
+								const now = new Date();
+								const day = now.getDay(); // 0 - Вс, 1 - Пн, ..., 6 - Сб
+								const scheduleIndex = day === 0 ? 6 : day - 1;
+								const todaySchedule = schedule[scheduleIndex];
+								let status = '';
+								if (todaySchedule === 'Выходной') {
+									status = 'Сегодня выходной';
+								} else {
+									const [start, end] = todaySchedule.split('–');
+									const [startH, startM] = start.split(':').map(Number);
+									const [endH, endM] = end.split(':').map(Number);
+									const nowMinutes = now.getHours() * 60 + now.getMinutes();
+									const startMinutes = startH * 60 + startM;
+									const endMinutes = endH * 60 + endM;
+									if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
+										status = 'Сейчас работает';
+									} else {
+										status = 'Сейчас не работает';
+									}
+								}
+								document.getElementById('koltsov-schedule').textContent = todaySchedule + ' (' + status + ')';
+							});
+							</script>
 							<div class="flex flex-col items-center">
-<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/ac/27196d9c9eccced779a8af43e4fb1f1c52eab8ac.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
+								<img class="lawyers-photo border border-black rounded-xl mb-2" src="https://cdn.esoft.digital/320240/cluster/profiles/ac/27196d9c9eccced779a8af43e4fb1f1c52eab8ac.jpeg" alt="Фото специалиста" style="width:180px; height:220px; object-fit:cover; background:#fff; border-width:1px;" />
 								<div style="font-size:1rem; color:#130909; text-align:center;">
 									<b>Вечканова Анна Сергеевна</b>
 									<a href="https://wa.me/79094127797" target="_blank" rel="noopener" style="margin-left:8px; vertical-align:middle; display:inline-block;">
 										<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:22px; height:22px; display:inline-block; vertical-align:middle; border-radius:4px;" />
 									</a>
 									<div style="font-size:0.95rem; color:#130909; margin-top:2px; font-weight:400;">Помощник Юриста</div>
+									<div id="vechkanova-schedule" style="font-size:0.95rem; color:#fc403a; margin-top:4px;"></div>
 								</div>
 							</div>
+							<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								const schedule = [
+									'09:00–18:00', // Пн
+									'Выходной',    // Вт
+									'09:00–18:00', // Ср
+									'09:00–18:00', // Чт
+									'09:00–18:00', // Пт
+									'09:00–18:00', // Сб
+									'Выходной'     // Вс
+								];
+								const now = new Date();
+								const day = now.getDay(); // 0 - Вс, 1 - Пн, ..., 6 - Сб
+								const scheduleIndex = day === 0 ? 6 : day - 1;
+								const todaySchedule = schedule[scheduleIndex];
+								let status = '';
+								if (todaySchedule === 'Выходной') {
+									status = 'Сегодня выходной';
+								} else {
+									const [start, end] = todaySchedule.split('–');
+									const [startH, startM] = start.split(':').map(Number);
+									const [endH, endM] = end.split(':').map(Number);
+									const nowMinutes = now.getHours() * 60 + now.getMinutes();
+									const startMinutes = startH * 60 + startM;
+									const endMinutes = endH * 60 + endM;
+									if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
+										status = 'Сейчас работает';
+									} else {
+										status = 'Сейчас не работает';
+									}
+								}
+								document.getElementById('vechkanova-schedule').textContent = todaySchedule + ' (' + status + ')';
+							});
+							</script>
 						</div>
 					</div>
 
@@ -1489,7 +1663,7 @@
 						<div
 	id="internalSection"
 	style="display: none; margin-top: 1rem; max-height: 120px; min-height: 220px; overflow-y: auto;"
-	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6 hide-scrollbar"
 						>
 							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
 								Для внутреннего пользования
@@ -1522,7 +1696,7 @@
 						<div
 	id="rgpSection"
 	style="display: none; margin-top: 1rem; max-height: 120px; min-height: 200px; overflow-y: auto;"
-	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6 hide-scrollbar"
 						>
 							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
 								Для РГП
@@ -1545,13 +1719,13 @@
 						</button>
 						<div
 	id="spnSection"
-style="display: none; margin-top: 1rem; max-height: 120px; min-height:200px; overflow-y: auto; position: relative;"
-	class="col-span-3 bg-white rounded-2xl shadow-lg p-6"
+	style="display: none; margin-top: 1rem; min-height:200px; max-height: 400px; min-width:200px; max-width:100%; resize: both; overflow: auto; position: relative; scrollbar-width: none;"
+	class="col-span-3 bg-white rounded-2xl shadow-lg p-6 hide-scrollbar"
 						>
 							<h3 class="text-xl font-bold mb-4" style="color: #fc403a">
 								Для СПН
 							</h3>
-				<ul class="dropdown-list list-disc pl-6 text-lg">
+				<ul class="dropdown-list list-disc pl-6 text-lg" style="color: #130909;">
 								<li>
 									<a href="https://docs.google.com/document/d/1p2fHtyeDK2l5pUUmqJiUgkVh8p-198xl/edit?usp=drive_link&ouid=114457247548955982049&rtpof=true&sd=true" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Чек лист по задатку</i></b></a>
 								</li>
@@ -1597,7 +1771,6 @@ style="display: none; margin-top: 1rem; max-height: 120px; min-height:200px; ove
 								<li>
 									<a href="https://docs.google.com/document/d/1HEizbcLzoBrvJjpgVn2ld7yej7awQdXbX0Oa4f3-yTM/edit?tab=t.0" style="color:#fc403a; text-decoration:underline; cursor:pointer;"><b><i>Установленная сумма задатка, в зависимости от стоимости объекта</i></b></a>
 								</li>
-							
 							</ul>
 						</div>
 						<script>
@@ -1668,7 +1841,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		<script>
 			// Хранилище для недавних
 			// (Your JavaScript logic should go here, not HTML markup)
-			// Remove any HTML fragments from inside <script> tags.
 		</script>
 
 <style>
